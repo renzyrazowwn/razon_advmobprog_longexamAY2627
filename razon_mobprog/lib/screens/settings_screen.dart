@@ -9,6 +9,8 @@ import '../services/user_service.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  // Enhancement 1 & 2
+  // logs out user by clearing saved preferences and navigating to sign-in screen
   Future<void> _signOut(
     BuildContext context,
   ) async {
@@ -57,10 +59,6 @@ class SettingsScreen extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    // EDIT FIX Enhancement 2: main.dart only registers '/signin' and
-    // '/splash' as named routes — '/login' does not exist, so tapping
-    // Sign Out threw a "could not find a generator" error instead of
-    // returning the user to the sign-in screen.
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/signin',
@@ -68,6 +66,8 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  // Enhancement 2
+  // builds settings screen with theme switcher and sign out option
   @override
   Widget build(BuildContext context) {
     final themeProvider =

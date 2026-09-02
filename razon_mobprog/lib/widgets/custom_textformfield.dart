@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-// EDIT FIX Enhancement 1: This file previously contained a duplicate copy of
-// custom_dialogs.dart (customDialog / customShowImageDialog) instead of the
-// CustomTextFormField widget that signin_screen.dart needs to render the
-// username/password fields used to authenticate the user against
-// https://dummyjson.com/docs/users. Rebuilt as the actual reusable text
-// field widget below.
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
@@ -36,6 +30,8 @@ class CustomTextFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
   });
 
+  // Enhancement 1
+  // builds custom text form field with password toggle support
   @override
   Widget build(BuildContext context) {
     return TextFormField(

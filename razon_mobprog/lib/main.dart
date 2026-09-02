@@ -6,6 +6,8 @@ import 'providers/theme_provider.dart';
 import 'screens/signin_screen.dart';
 import 'screens/splash_screen.dart';
 
+// Enhancement 1 & 2
+// wraps app root with ChangeNotifierProvider for global theme management
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -18,6 +20,7 @@ void main() {
 class FacebookReplication extends StatelessWidget {
   const FacebookReplication({super.key});
 
+  // builds root application widget configuring theme and routes
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
@@ -37,12 +40,9 @@ class FacebookReplication extends StatelessWidget {
           themeMode: themeProvider.isDark
               ? ThemeMode.dark
               : ThemeMode.light,
-
-          // EDIT FIX Enhancement 1: the app must boot into SplashScreen so
-          // it can check shared_preferences for a saved session and decide
-          // whether to send the user to HomeScreen or SignInScreen. This
-          // was hard-coded to '/signin', which skipped that check entirely
-          // and meant a logged-in user had to sign in again every launch.
+          
+          // Enhancement 1
+          // launches splash screen first to verify saved session
           initialRoute: '/splash',
 
           routes: {

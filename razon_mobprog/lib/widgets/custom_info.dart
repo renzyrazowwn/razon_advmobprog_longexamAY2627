@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A reusable placeholder widget for empty, loading, and error states.
-///
-/// Used anywhere a screen needs to tell the user "there's nothing here
-/// yet" or "something went wrong" without re-writing the same icon +
-/// message + optional retry-button layout in every screen.
 class CustomInfo extends StatelessWidget {
   final IconData icon;
   final String message;
@@ -12,6 +7,8 @@ class CustomInfo extends StatelessWidget {
   final VoidCallback? onAction;
   final EdgeInsetsGeometry padding;
 
+  // Enhancement 2
+  // base constructor for info message widget
   const CustomInfo({
     super.key,
     this.icon = Icons.info_outline,
@@ -21,8 +18,7 @@ class CustomInfo extends StatelessWidget {
     this.padding = const EdgeInsets.all(24),
   });
 
-  /// Convenience constructor for an empty-state message
-  /// (e.g. "No posts yet.").
+  // constructor for empty state message
   const CustomInfo.empty({
     super.key,
     required this.message,
@@ -31,8 +27,7 @@ class CustomInfo extends StatelessWidget {
   })  : actionLabel = null,
         onAction = null;
 
-  /// Convenience constructor for an error state with an optional
-  /// retry action.
+  // constructor for error state message
   const CustomInfo.error({
     super.key,
     required this.message,
@@ -42,6 +37,7 @@ class CustomInfo extends StatelessWidget {
     this.padding = const EdgeInsets.all(24),
   });
 
+  // builds custom info status widget
   @override
   Widget build(BuildContext context) {
     return Padding(

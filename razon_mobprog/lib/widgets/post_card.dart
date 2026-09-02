@@ -6,12 +6,6 @@ import '../constants.dart';
 import '../screens/detail_screen.dart';
 import 'custom_font.dart';
 
-// EDIT FIX Enhancement 2 / 3: This file previously contained a duplicate
-// copy of DetailScreen (now correctly restored to screens/detail_screen.dart).
-// Rebuilt as the actual PostCard widget that profile_screen.dart
-// (Enhancement 2 — posts rendered by userId) expects to import, with its
-// own clickable Like button and a tap target that opens the full post with
-// its comments (Enhancement 3) in DetailScreen.
 class PostCard extends StatefulWidget {
   final int postId;
   final String userName;
@@ -46,9 +40,8 @@ class _PostCardState extends State<PostCard> {
     _likes = widget.numOfLikes;
   }
 
-  // EDIT FIX Enhancement 3: clickable like button directly on the post
-  // preview (not just inside DetailScreen), so tapping the newsfeed/profile
-  // card updates likes immediately without opening the post.
+  // Enhancement 3
+  // toggles post preview like state and updates count
   void _toggleLike() {
     setState(() {
       _isLiked = !_isLiked;
@@ -71,6 +64,8 @@ class _PostCardState extends State<PostCard> {
     return AssetImage(image);
   }
 
+  // Enhancement 2 & 3
+  // opens detail screen with post comments for selected post
   void _openDetail(BuildContext context) {
     Navigator.push(
       context,
@@ -88,6 +83,8 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
+  // Enhancement 2 & 3
+  // builds post card widget rendered in newsfeed and profile
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -115,7 +112,6 @@ class _PostCardState extends State<PostCard> {
                   ),
 
                   SizedBox(width: 10.w),
-
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,8 +162,6 @@ class _PostCardState extends State<PostCard> {
               Row(
                 children: [
                   Expanded(
-                    // EDIT FIX Enhancement 3: like button is clickable and
-                    // reflects the running like count.
                     child: TextButton.icon(
                       onPressed: _toggleLike,
                       icon: Icon(
@@ -186,8 +180,6 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                   Expanded(
-                    // EDIT FIX Enhancement 3: opens DetailScreen so the
-                    // user can read/add comments for this post.
                     child: TextButton.icon(
                       onPressed: () => _openDetail(context),
                       icon: const Icon(Icons.comment_outlined, size: 18),

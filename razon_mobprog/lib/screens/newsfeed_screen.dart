@@ -9,12 +9,6 @@ import '../services/user_service.dart';
 import '../widgets/custom_info.dart';
 import '../widgets/post_card.dart';
 
-// EDIT FIX Enhancement 2 / 3: This file previously contained a duplicate
-// copy of HomeScreen (now correctly restored to screens/home_screen.dart),
-// so NewsFeedScreen — which home_screen.dart already tries to instantiate —
-// did not exist and the app could not compile. Rebuilt as the actual feed
-// screen: it loads posts from GET /posts and renders each one with
-// PostCard, which is what carries the Enhancement 3 like/comment behavior.
 class NewsFeedScreen extends StatefulWidget {
   final int userId;
   final String username;
@@ -33,10 +27,10 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
   final PostService _postService = PostService();
   final UserService _userService = UserService();
 
+  // Enhancement 2
+  // holds loaded posts from dummyjson API
   List<Post> _posts = [];
 
-  // Cache of author id -> author, so each post can show the poster's real
-  // name (and avatar) instead of a generic "User #id" placeholder.
   final Map<int, User> _usersById = {};
 
   bool _isLoading = true;
@@ -48,6 +42,8 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
     _loadPosts();
   }
 
+  // Enhancement 2
+  // fetches all posts from API
   Future<void> _loadPosts() async {
     setState(() {
       _isLoading = true;
@@ -64,9 +60,6 @@ class _NewsFeedScreenState extends State<NewsFeedScreen> {
         _isLoading = false;
       });
 
-      // Fetch author details for every distinct poster on this page of
-      // posts, in parallel, then merge them in as they arrive so names
-      // fill in without blocking the initial post list from showing.
       _loadAuthors(posts);
     } catch (e) {
       if (!mounted) return;

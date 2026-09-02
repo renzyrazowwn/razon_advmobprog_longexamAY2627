@@ -9,15 +9,7 @@ import '../services/comment_service.dart';
 import '../services/user_service.dart';
 import '../widgets/custom_info.dart';
 
-// EDIT FIX Enhancement 3: This file previously contained a duplicate copy of
-// SettingsScreen (identical to settings_screen.dart) instead of the actual
-// DetailScreen. The real DetailScreen implementation had been mis-saved
-// under widgets/post_card.dart, breaking every screen that imports
-// 'screens/detail_screen.dart' expecting a DetailScreen class (e.g.
-// custom_notification.dart, post_card.dart). It is restored here, and it
-// renders all comments for a post via GET /posts/{id}/comments, lets the
-// user add a comment via POST /comments/add, and exposes a clickable Like
-// button for both the post and each individual comment.
+
 class DetailScreen extends StatefulWidget {
   final int? postId;
   final String userName;
@@ -43,6 +35,8 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  // Enhancement 3
+  // tracks local like count for the current post
   late int _likes;
 
   bool _isLiked = false;
@@ -58,11 +52,10 @@ class _DetailScreenState extends State<DetailScreen> {
 
   final List<Comment> _comments = [];
 
-  // EDIT FIX Enhancement 3: track which comments the current user has
-  // liked locally, so each comment's Like button is independently
-  // clickable (dummyjson has no per-user "liked" state to read back).
   final Set<int> _likedComments = {};
 
+// Enhancement 1
+// holds currently authenticated user session
   User? _currentUser;
 
   @override
@@ -75,6 +68,8 @@ class _DetailScreenState extends State<DetailScreen> {
     _loadComments();
   }
 
+// Enhancement 1
+// retrieves saved logged-in user from shared preferences
   Future<void> _loadUser() async {
     final user = await _userService.getSavedUser();
 
@@ -85,6 +80,8 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
+// Enhancement 3
+// fetches comments belonging to current post ID from API
   Future<void> _loadComments() async {
     if (widget.postId == null) {
       setState(() {
@@ -122,8 +119,8 @@ class _DetailScreenState extends State<DetailScreen> {
     }
   }
 
-  // Post-level like toggle (Enhancement 3: "the like button must be
-  // clickable").
+// Enhancement 3
+// toggles post like button and updates count using setState
   void _toggleLike() {
     setState(() {
       _isLiked = !_isLiked;
@@ -136,7 +133,6 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  // EDIT FIX Enhancement 3: clickable like button per comment.
   void _toggleCommentLike(int commentId) {
     setState(() {
       if (_likedComments.contains(commentId)) {
@@ -147,6 +143,8 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
+// Enhancement 3
+// posts new comment to dummyjson API
   Future<void> _addComment() async {
     final text = _commentController.text.trim();
 
@@ -209,9 +207,9 @@ class _DetailScreenState extends State<DetailScreen> {
     return AssetImage(image);
   }
 
+// Enhancement 3
+// builds comment list item with clickable like button
   Widget _buildComment(Comment comment) {
-    // EDIT FIX Enhancement 3: comment's displayed like count reflects the
-    // user's local toggle on top of the count returned by the API.
     final isLiked = _likedComments.contains(comment.id);
     final displayedLikes = comment.likes + (isLiked ? 1 : 0);
 
@@ -254,8 +252,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
                   SizedBox(height: 4.h),
 
-                  // EDIT FIX Enhancement 3: clickable like button on each
-                  // individual comment.
+                  // Enhancement 3
+                  // renders clickable like button for comment
                   InkWell(
                     onTap: () => _toggleCommentLike(comment.id),
                     borderRadius: BorderRadius.circular(6),
@@ -298,6 +296,8 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
+// Enhancement 3
+// renders comment section states including loading and empty
   Widget _buildComments() {
     if (_loadingComments) {
       return const Padding(
@@ -411,8 +411,6 @@ class _DetailScreenState extends State<DetailScreen> {
                   Row(
                     children: [
                       Expanded(
-                        // EDIT FIX Enhancement 3: post-level Like button is
-                        // wired to _toggleLike (clickable, updates count).
                         child: TextButton.icon(
                           onPressed: _toggleLike,
                           icon: Icon(
@@ -463,8 +461,6 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
 
-          // EDIT FIX Enhancement 3: input row that lets the user add a
-          // comment on the post via POST /comments/add.
           SafeArea(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),

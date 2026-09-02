@@ -95,7 +95,7 @@ class _SignInScreenState
         context,
         title: 'Connection Error',
         content:
-            'Unable to connect to DummyJSON. Please check your internet connection.',
+            'Unable to connect. Please check your internet connection.',
       );
     }
   }
@@ -226,15 +226,6 @@ class _SignInScreenState
                 Container(
                   height: 45.h,
                   color: PEACE_DARK_PRIMARY,
-                  child: Center(
-                    child: Text(
-                      'Use a DummyJSON test account to log in.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),
